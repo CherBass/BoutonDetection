@@ -8,6 +8,7 @@ function [boutonLocations, score] = svmBoutonDetection(meanImage, Parameters)
 %boutonLocations- Bouton locations (x,y)
 %score- a 'struct' of the SVM scores for each candidate bouton
 %% Initialize variables
+
 sizeImage = size(meanImage,1);
 shiftCentroid = 1;
 crossval = 1;
@@ -26,52 +27,34 @@ end
 LoGNorm = LoGImage / max((LoGImage(:)));
 
 %% Get bouton centroids using an interest point detector
-%SURF keypoints
-SURFPoints = detectSURFFeatures(LoGNorm);
-SURFLocations = SURFPoints.Location;
-SURFLocations = SURFLocations - padSize(1);
-detectorLocations.SURF = SURFLocations;
 
-%SIFT keypoints
-[SIFTPoints, SIFTFeatures] = vl_sift(single(meanImage));
-[~, indexFeatures] = sort(sum(SIFTFeatures,1), 'ascend');
-SIFTLocations = SIFTPoints(1:2,indexFeatures(1:100))';
-SIFTLocations = SIFTLocations - padSize(1);
-detectorLocations.SIFT = SIFTLocations;
 
-%Harris keypoints
-harrisPoints = detectHarrisFeatures(meanImage);
-harrisLocations = harrisPoints.Location;
-harrisLocations = harrisLocations - padSize(1);
-detectorLocations.harris = harrisLocations;
 
-if Plot ==1
-    figure; imagesc(meanImage); colormap(gray); 
-    hold on;
-    plot(SURFLocations(:,1),SURFLocations(:,2),'g+');
-    title('SURF locations');
-    axis off;
-
-    figure; imagesc(meanImage); colormap(gray); 
-    hold on;
-    plot(SIFTLocations(:,1),SIFTLocations(:,2),'g+')
-    title('SIFT locations');
-    axis off;
-
-    figure; imagesc(meanImage); colormap(gray); 
-    hold on;
-    plot(harrisLocations(:,1),harrisLocations(:,2),'g+')
-    title('Harris locations');
-    axis off;
-end
    
-%% Choose interest point detector
 
 if strcmp(detector, 'SURF')
+    %SURF keypoints
+    SURFPoints = detectSURFFeatures(LoGNorm);
+    SURFLocations = SURFPoints.Location;
+    SURFLocations = SURFLocations - padSize(1);
+    detectorLocations.SURF = SURFLocations;
     interestPoints = SURFLocations;
+    
 elseif strcmp(detector, 'harris')
+    %Harris keypoints
+    harrisPoints = detectHarrisFeatures(meanImage);
+    harrisLocations = harrisPoints.Location;
+    harrisLocations = harrisLocations - padSize(1);
+    detectorLocations.harris = harrisLocations;
     interestPoints = harrisLocations;
+    
 elseif strcmp(detector, 'SIFT')
+    %SIFT keypoints
+    [SIFTPoints, SIFTFeatures] = vl_sift(single(meanImage));
+    [~, indexFeatures] = sort(sum(SIFTFeatures,1), 'ascend');
+    SIFTLocations = SIFTPoints(1:2,indexFeatures(1:100))';
+    SIFTLocations = SIFTLocations - padSize(1);
+    detectorLocations.SIFT = SIFTLocations;
     interestPoints = SIFTLocations;
 end    
 
