@@ -43,8 +43,6 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-n=1;
-save('currentImage.mat', 'n') 
 
 
 
@@ -88,6 +86,8 @@ imagesc(meanImage{1});colormap(gray);
 hold on;
 plot(boutons(:,1),boutons(:,2),'g+')
 display('done')
+n=1;
+save('currentImage.mat', 'n') 
 save('Data.mat', 'finalBoutons', 'meanImage') 
 
 

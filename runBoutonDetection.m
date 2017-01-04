@@ -90,7 +90,7 @@ if find3D == 1
                 movegui('east');
             end
         end
-    finalBoutons(n).Locations=boutonLocations3D;
+    finalBoutons(n).Locations3D=boutonLocations3D;
     end
 end
 
