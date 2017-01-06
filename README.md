@@ -3,6 +3,8 @@
 This is demonstration code that illustrates a new algorithm for the detection of axonal synaspses in 3D microscopy images.
 This code contains a simple gui that allows the analysis of several images, and a simple user interface to correct any mistakes made by the algorithm. See Instructions pdf file for more detail on how to use.
 
+We ask to submit negative examples, with corresponding images, so that we may improve the performance of the algorithm...
+
 The analysis of axonal synapses (boutons) is often required when studying structural plasticity in the brain. To date, this type analysis has been largely manual or semi-automated, and relies on a step that traces the axon before detecting boutons, which if fails, limits the ability to detect axonal boutons. We propose a new algorithm that does not require tracing the axon to detect axonal boutons in 3D two-photon images taken from the mouse cortex. 
 
 ## The final algorithm proposed has the following main steps: ##
