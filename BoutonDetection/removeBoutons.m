@@ -11,9 +11,10 @@ function [boutons] = removeBoutons(boutons, xRemove, yRemove)
 toRemove = [xRemove,yRemove];
 numToRemove = size(toRemove,1);
 numBoutons = size(boutons,1);
+boutonsTemp = boutons(:,1:2);
     for i = 1:numToRemove
         for j = 1:numBoutons
-        dist(j) = pdist([toRemove(i,:); boutons(j,:)], 'euclidean');
+        dist(j) = pdist([toRemove(i,:); boutonsTemp(j,:)], 'euclidean');
         end
         [~,locations(i)]= min(dist);
     end

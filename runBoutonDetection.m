@@ -7,10 +7,9 @@ function [finalBoutons, meanImage] = runBoutonDetection()
 %change parameters according to the comments
 Parameters.descriptor = 'Gabor';            %Options = 'Gabor', 'SIFT', 'HOG'
 Parameters.interestPointDetector = 'SURF';  %Options = 'SURF', 'SIFT', 'harris'
-find3D = 0;                                 %0= don't find 3D points, 1= find 3D points
+find3D = 1;                                 %0= don't find 3D points, 1= find 3D points
 Plot = 0;                                   %0= don't plot figures, 1=plot figures
 Plot3D = 0;                                 %0= don't plot, 1=plot 3D image stacks 
-Save = 1;                                   %0= don't save, 1=save bouton locations
 
 
 %% Initialization of other parameters
@@ -41,10 +40,9 @@ end
 
 scoreMax = max(max(scoreMax));
 
-%% Extract bouton locations from images and edit
+%% save bouton information to finalBoutons
 
 for n = 1: numFiles
-    finished =0;
     finalLabels = (boutonScore(n).score ./scoreMax) > scoreThresh ;
     image = meanImage{n};
     finalBoutons(n).Image = n;
@@ -80,7 +78,7 @@ if find3D == 1
         [boutonLocations3D] = find3DBoutonLocation(boutonLocations, currImage3D, sizeBouton); 
 
         %Plot all boutons and frames
-        if Plot3D
+        if Plot3D == 1
             for f = 1:size(currImage3D,3)
                 figure; imagesc(currImage3D(:,:,f)); colormap(gray); title(['Frame:', num2str(f)]); 
                 hold on;
@@ -90,14 +88,19 @@ if find3D == 1
                 movegui('east');
             end
         end
-    finalBoutons(n).Locations3D=boutonLocations3D;
+    finalBoutons(n).Locations=boutonLocations3D;
     end
 end
 
 
 %% Save data
-if Save ==1
-   %save file as: save('filename.mat', 'finalBoutons') 
-   save('Data.mat', 'finalBoutons', 'meanImage') 
+if find3D == 1
+    save('parameters.mat', 'meanImage', 'find3D', 'image3D' ) 
+else
+    save('parameters.mat', 'meanImage', 'find3D' ) 
 end
+
+%saves data
+save('Data.mat', 'finalBoutons' )
+
 end

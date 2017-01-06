@@ -88,7 +88,6 @@ plot(boutons(:,1),boutons(:,2),'g+')
 display('done')
 n=1;
 save('currentImage.mat', 'n') 
-save('Data.mat', 'finalBoutons', 'meanImage') 
 
 
 
@@ -99,18 +98,32 @@ function addBoutons_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 load('Data.mat');
+load('parameters.mat')
 load('currentImage.mat');
+
+%add new boutons
 boutons = finalBoutons(n).Locations;
 [xAdd,yAdd] = ginput;
 locationsAdd = [xAdd,yAdd];
 if ~isempty(locationsAdd)
-    locationsAdd = addBoutons(locationsAdd, meanImage{1});
+    locationsAdd = addBoutons(locationsAdd, meanImage{n});
+    if find3D == 1
+        [locationsAdd] = find3DBoutonLocation(locationsAdd, image3D(n).image, 625); 
+    end
     boutons = [boutons; locationsAdd];
 end
 imagesc(meanImage{n});colormap(gray);
 plot(boutons(:,1),boutons(:,2),'g+')
 finalBoutons(n).Locations = boutons;
-save('Data.mat', 'finalBoutons', 'meanImage') 
+
+%find corresponding bouton intensities
+image = meanImage{n};
+for i = 1:length(boutons)
+    intensities(i) = image(boutons(i,2),boutons(i,1));
+end
+finalBoutons(n).Intensities = intensities;    
+
+save('Data.mat', 'finalBoutons') 
 
 
 % --- Executes on button press in removeBoutons.
@@ -119,7 +132,10 @@ function removeBoutons_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 load('Data.mat');
+load('parameters.mat')
 load('currentImage.mat');
+
+%remove boutons selected
 boutons = finalBoutons(n).Locations;
 [xRemove,yRemove] = ginput;
 if ~isempty(xRemove)
@@ -128,7 +144,15 @@ end
 imagesc(meanImage{n});colormap(gray);
 plot(boutons(:,1),boutons(:,2),'g+')
 finalBoutons(n).Locations = boutons;
-save('Data.mat', 'finalBoutons', 'meanImage') 
+
+%find corresponding bouton intensities
+image = meanImage{n};
+for i = 1:length(boutons)
+    intensities(i) = image(boutons(i,2),boutons(i,1));
+end
+finalBoutons(n).Intensities = intensities;    
+
+save('Data.mat', 'finalBoutons') 
 
 
 % --- Executes on button press in contrast.
@@ -149,6 +173,7 @@ function numImage_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of numImage as a double
 n = str2double(get(hObject,'String'));
 load('Data.mat');
+load('parameters.mat')
 boutons = finalBoutons(n).Locations;
 imagesc(meanImage{n});colormap(gray);
 plot(boutons(:,1),boutons(:,2),'g+')
