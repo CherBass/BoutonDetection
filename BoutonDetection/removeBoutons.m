@@ -1,4 +1,4 @@
-function [boutons] = removeBoutons(boutons, xRemove, yRemove)
+function [boutons, removedBoutons] = removeBoutons(boutons, xRemove, yRemove)
 %This function takes bouton locations, and coordinates of boutons to
 %remove, and removes the closest boutons
 %Inputs:
@@ -18,5 +18,6 @@ boutonsTemp = boutons(:,1:2);
         end
         [~,locations(i)]= min(dist);
     end
+    removedBoutons = boutons(locations,:);
     boutons(locations,:)=[];
 end

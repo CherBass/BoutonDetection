@@ -139,11 +139,17 @@ load('currentImage.mat');
 boutons = finalBoutons(n).Locations;
 [xRemove,yRemove] = ginput;
 if ~isempty(xRemove)
-    boutons = removeBoutons(boutons, xRemove, yRemove);
+    [boutons,removedBoutons]= removeBoutons(boutons, xRemove, yRemove);
 end
 imagesc(meanImage{n});colormap(gray);
 plot(boutons(:,1),boutons(:,2),'g+')
+%save bouton locations
 finalBoutons(n).Locations = boutons;
+
+%save removed boutons
+removedBoutonTemp = finalBoutons(n).removedBoutons;
+removedBoutons = [removedBoutons;removedBoutonTemp];
+finalBoutons(n).removedBoutons = removedBoutons;
 
 %find corresponding bouton intensities
 image = meanImage{n};

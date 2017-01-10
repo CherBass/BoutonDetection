@@ -24,7 +24,10 @@ if  find3D == 1
     [image3D, meanImage, ~, ~, numFiles, ~] = readTIFfiles();
 else
     %Get images to be analysed
-    [~, meanImage, ~, ~, numFiles, ~] = readTIFfiles();
+    [image3D, meanImage, ~, ~, numFiles, ~] = readTIFfiles();
+end
+for i = 1:size(image3D,2)
+    finalBoutons(i).Image = image3D(i).imageName;
 end
 sizeImage = size(meanImage{1},1)*size(meanImage{1},2);
 
@@ -45,7 +48,6 @@ scoreMax = max(max(scoreMax));
 for n = 1: numFiles
     finalLabels = (boutonScore(n).score ./scoreMax) > scoreThresh ;
     image = meanImage{n};
-    finalBoutons(n).Image = n;
     boutons = boutonLocations{n}(finalLabels,:);
 
     %save final boutons
@@ -89,6 +91,7 @@ if find3D == 1
             end
         end
     finalBoutons(n).Locations=boutonLocations3D;
+    finalBoutons(n).removedBoutons=[];
     end
 end
 

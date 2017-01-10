@@ -23,6 +23,7 @@ elseif numFiles == 1
     meanImage={mean(Image ,3)}; %take the mean image
     maxImage={max(Image, [] ,3)}; %take the max image
     sumImage = {sum(Image ,3)}; %take the sum image
+    imageOut(1).imageName = filename;
     imageOut(1).image = Image;
 else
     for i = 1:numFiles
