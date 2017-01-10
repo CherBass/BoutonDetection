@@ -7,7 +7,7 @@ function [finalBoutons, meanImage] = runBoutonDetection()
 %change parameters according to the comments
 Parameters.descriptor = 'Gabor';            %Options = 'Gabor', 'SIFT', 'HOG'
 Parameters.interestPointDetector = 'SURF';  %Options = 'SURF', 'SIFT', 'harris'
-find3D = 0;                                 %0= don't find 3D points, 1= find 3D points
+find3D = 1;                                 %0= don't find 3D points, 1= find 3D points
 Plot = 0;                                   %0= don't plot figures, 1=plot figures
 Plot3D = 0;                                 %0= don't plot, 1=plot 3D image stacks 
 
