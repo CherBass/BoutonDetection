@@ -7,7 +7,7 @@ function [finalBoutons, meanImage] = runBoutonDetection()
 %change parameters according to the comments
 Parameters.descriptor = 'Gabor';            %Options = 'Gabor', 'SIFT', 'HOG'
 Parameters.interestPointDetector = 'SURF';  %Options = 'SURF', 'SIFT', 'harris'
-find3D = 1;                                 %0= don't find 3D points, 1= find 3D points
+find3D = 0;                                 %0= don't find 3D points, 1= find 3D points
 Plot = 0;                                   %0= don't plot figures, 1=plot figures
 Plot3D = 0;                                 %0= don't plot, 1=plot 3D image stacks 
 
@@ -65,9 +65,9 @@ end
 if Plot==1
     for n = 1:numFiles
         boutons = finalBoutons(n).Locations;
-        imagesc(meanImage{n}); colormap(gray); title(['Image: ', num2str(n),'. Bouton detection following editing.']); 
+        imagesc(meanImage{n}); colormap(gray); title(['Image: ', num2str(n),'. Bouton detection following SVM.']); 
         hold on;
-        plot(boutons(:,1),boutons(:,2),'w+')
+        plot(boutons(:,1),boutons(:,2),'g+')
         axis off;
         pause(1);
     end
