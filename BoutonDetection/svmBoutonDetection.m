@@ -59,6 +59,14 @@ end
 interestPoints(row,:) = [];
 [row,~] = find(interestPoints > sizeImage);
 interestPoints(row,:) = [];
+%% Plot interest points
+if Plot==1
+    figure; imagesc(meanImage); colormap(gray); hold on;
+    plot(interestPoints(:,1),interestPoints(:,2),'r+')
+    title('Bouton interest points');
+    axis off;
+end
+
 
 %% Shift centroids to local maximum
 
@@ -71,11 +79,6 @@ interestPoints(row,:) = [];
 
 [boutonLocations] = removeAllCloseBoutons(boutonLocations, meanImage, distThresh);
 
-%Plot new bouton locations
-if Plot == 1
-    figure; imagesc(meanImage); colormap(gray); hold on;
-    plot(boutonLocations(:,1),boutonLocations(:,2),'r+')
-end
 %% Extract bouton patches
 %Extract the bouton patches using the bouton locations extracted
 
