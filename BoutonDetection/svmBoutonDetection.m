@@ -28,10 +28,6 @@ LoGNorm = LoGImage / max((LoGImage(:)));
 
 %% Get bouton centroids using an interest point detector
 
-
-
-   
-
 if strcmp(detector, 'SURF')
     %SURF keypoints
     SURFPoints = detectSURFFeatures(LoGNorm);
