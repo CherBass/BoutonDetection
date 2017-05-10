@@ -56,7 +56,7 @@ precisionAll = zeros(length(boutonScoreThresh),1);
 F1all =  zeros(length(boutonScoreThresh),1);
 ik = 1; %keep track of iterations
 
-for k = boutonScoreThresh(4994)
+for k = boutonScoreThresh%(4994)
         
     for n = 1: numFiles
         finalLabels = (boutonScore(n).score ./scoreMax) > k ;
@@ -67,8 +67,9 @@ for k = boutonScoreThresh(4994)
     %% get accuracy and plot
 
     %[labelledImages] = extractTestBoutons('test data2- 20 images'); %('TestData1- 46 images'); 
-    [labelledImages] = extractTestBoutons('NewDataGroundTruthLabels1'); %labels of new data
-    
+    [labelledImages] = extractTestBoutons('NewDataGroundTruthLabels1.mat'); %labels of new data
+    [labelledEPBscore] = extractEPBscoreBoutons('NewData- EPBscore.mat');
+
     accuracy = zeros(numFiles,1);
     TPR = zeros(numFiles,1);
     FPR = zeros(numFiles,1);
@@ -81,10 +82,15 @@ for k = boutonScoreThresh(4994)
     for i = 1:numFiles
         currBoutons = finalBoutons{1,i};
         labelledBoutons = labelledImages(i).boundingbox;
-        
+        EPBscoreBoutons = labelledEPBscore(i).coord;
+        numInterestPointsEPBscore = size(labelledEPBscore(i).coord,1);
+
         %Get scores of detected boutons
         score(i) = scoreBoutons(currBoutons,labelledBoutons, sizeImage, sizeBouton);
+        EPBscore(i) = scoreBoutons(EPBscoreBoutons,labelledBoutons, sizeImage, sizeBouton);
+
         accuracy(i) = score(i).accuracy;
+        EPBscoreAccuracy(i) = EPBscore(i).accuracy;
         TPR(i) = score(i).TPR;
         FPR(i) = score(i).FPR;
         TP(i) = score(i).TP;
@@ -93,16 +99,26 @@ for k = boutonScoreThresh(4994)
         numBoutons(i) = score(i).numTrueBoutons;
         F1(i) = score(i).F1;
         precision(i) = score(i).precision;
+        
+        EPBscoreF1(i) = EPBscore(i).F1;
+        EPBscorePrecision(i) = EPBscore(i).precision;
+        EPBscoreTPR(i) = EPBscore(i).TPR;
+
         %Plot detected boutons and a rectangle around the True Positives
         w = labelledImages(i).width(:);
         h = labelledImages(i).height(:);
         x = labelledImages(i).boundingbox(:,1);
         y = labelledImages(i).boundingbox(:,3);
 
-        if 1
+        if 0
             figure; imagesc(meanImage{i}); colormap(gray); axis off; %title('Bouton detection after SVM'); 
             hold on
             plot(currBoutons(:,1),currBoutons(:,2),'r+')
+            for j = 1:length(x)
+                rectangle('Position',[x(j),y(j),w(j),h(j)], 'LineWidth',2, 'EdgeColor', 'w');
+            end
+            
+            plot(EPBscoreBoutons(:,1),EPBscoreBoutons(:,2),'g+')
             for j = 1:length(x)
                 rectangle('Position',[x(j),y(j),w(j),h(j)], 'LineWidth',2, 'EdgeColor', 'w');
             end
@@ -112,6 +128,11 @@ for k = boutonScoreThresh(4994)
     end
     
     %Accuracy measures
+    EPBscoreAccuracyPerImage(ik) = mean(EPBscoreAccuracy);
+    EPBscoreF1all(ik) =  mean(EPBscoreF1);
+    EPBscorePrecisionAll(ik) = mean(EPBscorePrecision);
+    EPBscoreTPRAll(ik) = mean(EPBscoreTPR);
+    
     F1all(ik) = mean(F1);
     accuracyPerImage(ik) = mean(accuracy);
     TPRPerImage(ik) = mean(TPR);
@@ -141,4 +162,4 @@ axis([0,0.00005,0,1]);
 
 %% Save
 
-%save('NewDataAnalysis-10k.mat', 'FPRPerImage', 'TPRPerImage', 'precisionAll', 'boutonScoreThresh', 'accuracyPerImage', 'F1all')
+%save('NewDataAnalysis-barGraph.mat', 'TPR', 'precision', 'F1', 'EPBscoreTPR', 'EPBscorePrecision', 'EPBscoreF1')
