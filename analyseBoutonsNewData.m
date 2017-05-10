@@ -56,7 +56,7 @@ precisionAll = zeros(length(boutonScoreThresh),1);
 F1all =  zeros(length(boutonScoreThresh),1);
 ik = 1; %keep track of iterations
 
-for k = boutonScoreThresh%(4994)
+for k = boutonScoreThresh(5027)%(4994)
         
     for n = 1: numFiles
         finalLabels = (boutonScore(n).score ./scoreMax) > k ;
@@ -79,6 +79,11 @@ for k = boutonScoreThresh%(4994)
     F1 = zeros(numFiles,1);
     precision = zeros(numFiles,1);
     numBoutons = zeros(numFiles,1);
+    EPBscoreAccuracy = zeros(numFiles,1);
+    EPBscoreF1 =  zeros(numFiles,1);
+    EPBscorePrecision= zeros(numFiles,1);
+    EPBscoreTPR = zeros(numFiles,1);
+
     for i = 1:numFiles
         currBoutons = finalBoutons{1,i};
         labelledBoutons = labelledImages(i).boundingbox;
@@ -110,15 +115,15 @@ for k = boutonScoreThresh%(4994)
         x = labelledImages(i).boundingbox(:,1);
         y = labelledImages(i).boundingbox(:,3);
 
-        if 0
+        if 1
             figure; imagesc(meanImage{i}); colormap(gray); axis off; %title('Bouton detection after SVM'); 
             hold on
-            plot(currBoutons(:,1),currBoutons(:,2),'r+')
+            plot(currBoutons(:,1),currBoutons(:,2),'m+')
             for j = 1:length(x)
                 rectangle('Position',[x(j),y(j),w(j),h(j)], 'LineWidth',2, 'EdgeColor', 'w');
             end
             
-            plot(EPBscoreBoutons(:,1),EPBscoreBoutons(:,2),'g+')
+            plot(EPBscoreBoutons(:,1),EPBscoreBoutons(:,2),'c+')
             for j = 1:length(x)
                 rectangle('Position',[x(j),y(j),w(j),h(j)], 'LineWidth',2, 'EdgeColor', 'w');
             end
@@ -128,10 +133,10 @@ for k = boutonScoreThresh%(4994)
     end
     
     %Accuracy measures
-    EPBscoreAccuracyPerImage(ik) = mean(EPBscoreAccuracy);
-    EPBscoreF1all(ik) =  mean(EPBscoreF1);
-    EPBscorePrecisionAll(ik) = mean(EPBscorePrecision);
-    EPBscoreTPRAll(ik) = mean(EPBscoreTPR);
+    EPBscoreAccuracyPerImage = mean(EPBscoreAccuracy);
+    EPBscoreF1all =  mean(EPBscoreF1);
+    EPBscorePrecisionAll = mean(EPBscorePrecision);
+    EPBscoreTPRAll = mean(EPBscoreTPR);
     
     F1all(ik) = mean(F1);
     accuracyPerImage(ik) = mean(accuracy);
@@ -161,5 +166,5 @@ hold on;
 axis([0,0.00005,0,1]);
 
 %% Save
-
-%save('NewDataAnalysis-barGraph.mat', 'TPR', 'precision', 'F1', 'EPBscoreTPR', 'EPBscorePrecision', 'EPBscoreF1')
+save('NewDataAnalysis-10k-2.mat', 'TPRPerImage', 'precisionAll', 'F1all', 'accuracyPerImage');
+save('NewDataAnalysis-barGraph.mat', 'TPR', 'precision', 'F1', 'EPBscoreTPR', 'EPBscorePrecision', 'EPBscoreF1')
