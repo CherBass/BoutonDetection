@@ -166,5 +166,5 @@ hold on;
 axis([0,0.00005,0,1]);
 
 %% Save
-save('NewDataAnalysis-10k-2.mat', 'TPRPerImage', 'precisionAll', 'F1all', 'accuracyPerImage');
-save('NewDataAnalysis-barGraph.mat', 'TPR', 'precision', 'F1', 'EPBscoreTPR', 'EPBscorePrecision', 'EPBscoreF1')
+%save('NewDataAnalysis-10k-2.mat', 'TPRPerImage', 'precisionAll', 'F1all', 'accuracyPerImage');
+%save('NewDataAnalysis-barGraph.mat', 'TPR', 'precision', 'F1', 'EPBscoreTPR', 'EPBscorePrecision', 'EPBscoreF1')
