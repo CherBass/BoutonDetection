@@ -21,3 +21,6 @@ The analysis of axonal synapses (boutons) is often required when studying struct
 
 5.  A Support Vector Machine (SVM) classifier, trained on features from labelled data, was lastly used to separate the features into bouton and non-bouton instances. 
 
+
+More detail in the following paper: 
+Bass C, Helkkula P, De Paola V, Clopath C, Bharath AA (2017) Detection of axonal synapses in 3D two-photon images. PLoS ONE 12(9): e0183309. https://doi.org/10.1371/journal.pone.0183309
